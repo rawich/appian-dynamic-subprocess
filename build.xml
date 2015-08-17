@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Dynamic Subprocess" default="dist" basedir=".">
+    <description>
+        Appian Dynamic Subprocess Smart Service
+    </description>
+	
+  <!-- set global properties for this build -->
+  <property name="projectName" value="com.appiancorp.dynamicsubprocess"/>
+  <property name="version" value="2.0.1"/>
+  <property name="src" location="src"/>
+  <property name="resources" location="resources"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="../exports"/>
+  <property name="appian.lib.dir" location="/appian/ear/suite.ear/lib"/>
+	
+  <path id="dependency.path">
+    <fileset dir="${appian.lib.dir}" includes="appian*.jar,log4j-1.2.15.jar" />
+  </path>
+
+  <target name="init" depends="clean">
+    	<!-- Create the time stamp -->
+   	 <tstamp/>
+    	<!-- Create the build directory structure used by compile -->
+    	<mkdir dir="${build}"/>
+  </target>
+
+  <target name="compile" depends="init"
+  	description="compile the source " >
+    	<!-- Compile the java code from ${src} into ${build} -->
+   	<javac srcdir="${src}" destdir="${build}" classpathref="dependency.path" includeantruntime="false" source="1.7" target="1.7"/>
+  	<copy todir="${build}/src">
+  		<fileset dir="${src}"/>
+  	</copy>
+  	<copy todir="${build}">
+  		<fileset dir="${resources}"/>
+  	</copy>
+    <!--copy todir="${build}" file="${basedir}/appian-plugin.xml" /-->
+  </target>
+
+  <target name="dist" depends="compile"
+  	description="generate the distribution" >
+    
+  	<!-- Create the distribution directory -->
+    	<mkdir dir="${dist}"/>
+
+    	<!-- Put everything in ${build} into the {$projectName}-${DSTAMP}.jar file -->
+    	<jar jarfile="${dist}/${projectName}_${version}.jar" basedir="${build}"/>
+  </target>
+
+  <target name="clean"
+    	description="clean up" >
+  	
+    	<!-- Delete the ${build} and ${dist} directory trees -->
+    	<delete dir="${build}"/>
+    	<delete file="${dist}/${projectName}_${version}.jar"/>
+  </target>
+</project>
