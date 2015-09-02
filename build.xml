@@ -12,6 +12,7 @@
   <property name="build" location="build"/>
   <property name="dist"  location="../exports"/>
   <property name="appian.lib.dir" location="/appian/ear/suite.ear/lib"/>
+
 	
   <path id="dependency.path">
     <fileset dir="${appian.lib.dir}" includes="appian*.jar,log4j-1.2.15.jar" />
@@ -27,6 +28,7 @@
   <target name="compile" depends="init"
   	description="compile the source " >
     	<!-- Compile the java code from ${src} into ${build} -->
+  		<!-- Compile with target to JDK 1.7 to allow compatibility back to Appian Version 7.1 -->
    	<javac srcdir="${src}" destdir="${build}" classpathref="dependency.path" includeantruntime="false" source="1.7" target="1.7"/>
   	<copy todir="${build}/src">
   		<fileset dir="${src}"/>
