@@ -30,12 +30,16 @@ import com.appiancorp.suiteapi.type.AppianType;
  * 
  * @author Originally created by Ryan Gates (Appian Corp - April 2013) / Modified by Rawich Poomrin (Persistent Systems - August 2015)
  * @version 2.0.1
- * This version addresses 2 issues:
- *   1) The node will fail to start sub-process if the Run-As user is not a system administrator and UUID is used to identify the sub-process.
- *   2) The Smart Service swallows Exceptions, and caused the node to look like completed successfully even if no sub-process has been started.
+ * This version addresses an issue of Exception swallowing:
+ *   - In case of error, and no sub-process is started, the previous version swallows Exception, 
+ *   and caused the node to look like completed successfully.  
+ *   In this new version, if there is any issue, it will be reported both in the log file, and Alert, and node will be pause by exception. 
+ *   
+ * Known issue:
+ *	  - The node will fail to start sub-process if UUID is used to identify the sub-process and the Run-As user is not a system administrator.
  *
  * There are two possible error scenarios, with appropriate error messages from resource bundle:
- * 	 - Looking up of process model ID from UUID failed (process model with the specified UUID does not exist)
+ * 	 - Looking up of process model ID from UUID failed (permission issue or process model with the specified UUID does not exist)
  *   - Starting the subprocess failed (most likely because the user who executes this node does not have at least initiator right to the target process model.
  */
 @PaletteInfo(paletteCategory = "Standard Nodes", palette = "Activities") 
