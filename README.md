@@ -1,5 +1,5 @@
 # Dynamic Subprocess (Async) Smart Service Plug-in for Appian
-> Originally created by Ryan Gates (Appian Corp / April 2013) / Updated by Rawich Poomrin (November 2015)
+> Originally created by Ryan Gates (Appian Corp / April 2013) / Updated by [Rawich Poomrin](https://github.com/rawich) (November 2015)
 
 Appian Smart Service plug-in to dynamically start asynchronous sub-process using process model id or UUID, which can be determined at run-time.
 
@@ -27,4 +27,4 @@ You'll need to use "Request Permission to Edit a Component" action in Appian For
 
 [![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)
 
-To the extent possible under law, [Matias Singers](http://mts.io) has waived all copyright and related or neighboring rights to this work.
+To the extent possible under law, [Rawich Poomrin](https://www.linkedin.com/in/rawich) has waived all copyright and related or neighboring rights to this work.
