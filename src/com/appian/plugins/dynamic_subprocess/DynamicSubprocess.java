@@ -28,19 +28,19 @@ import com.appiancorp.suiteapi.type.AppianType;
 
 /**
  * 
- * @author Originally created by Ryan Gates (Appian Corp - April 2013) / Modified by Rawich Poomrin (Persistent Systems - August 2015)
+ * @author Originally created by Ryan Gates (Appian Corp - April 2013) / Modified by Rawich Poomrin (Persistent Systems - November 2015)
  * @version 2.0.1
  * This version addresses an issue of Exception swallowing:
- *   - In case of error, and no sub-process is started, the previous version swallows Exception, 
- *   and caused the node to look like completed successfully.  
- *   In this new version, if there is any issue, it will be reported both in the log file, and Alert, and node will be pause by exception. 
+ *   In case of error, and no sub-process is started, the previous version swallows Exception, 
+ *   and caused the node to look like completed successfully (from Appian Designer portal and Monitor Process).
+ *   In this new version, if there is any issue, it will be reported both in the log file, and Alert, and node will be paused by exception. 
  *   
  * Known issue:
  *	  - The node will fail to start sub-process if UUID is used to identify the sub-process and the Run-As user is not a system administrator.
  *
- * There are two possible error scenarios, with appropriate error messages from resource bundle:
+ * There are two main error scenarios, with appropriate error messages from resource bundle:
  * 	 - Looking up of process model ID from UUID failed (permission issue or process model with the specified UUID does not exist)
- *   - Starting the subprocess failed (most likely because the user who executes this node does not have at least initiator right to the target process model.
+ *   - Starting the subprocess failed (most likely because the user who executes this node does not have enough security access to the target process model.
  */
 @PaletteInfo(paletteCategory = "Standard Nodes", palette = "Activities") 
 public class DynamicSubprocess extends AppianSmartService {
@@ -54,29 +54,24 @@ public class DynamicSubprocess extends AppianSmartService {
   @SuppressWarnings("deprecation")
   @Override
   public void run() throws SmartServiceException {
-
-	  // Create Service Context with System Administrator privilege.
-	  ServiceContext asc = ServiceContextFactory.getAdministratorServiceContext();
+ 
       ServiceContext sc = ServiceContextFactory.getServiceContext(smartServiceCtx.getUsername());
       
-      ProcessExecutionService pes = ServiceLocator.getProcessExecutionService(asc);
-      ProcessDesignService apds = ServiceLocator.getProcessDesignService(asc);
-      
-      // Only one PDS in the normal user context needed to actually inititate the new process
+      ProcessExecutionService pes = ServiceLocator.getProcessExecutionService(sc);
       ProcessDesignService pds = ServiceLocator.getProcessDesignService(sc);
 
+      // If Process Model UUID is provided, instead of ID, then the user context need to be an Administrator
       if (modelId == null) {
         try {
-          modelId = apds.getProcessModelByUuid(modelUUID).getId();
+          modelId = pds.getProcessModelByUuid(modelUUID).getId();
         } catch (Exception e) {
           LOG.error(e,e);
           throw createException(e, "error.invalidUUID");
         }
       }
       
-      
       try {
-        ProcessVariable[] sub = apds.getProcessModelParameters(modelId);
+        ProcessVariable[] sub = pds.getProcessModelParameters(modelId);
         ProcessVariableInstance[] parent = pes.getRecursiveProcessVariables(this.smartServiceCtx.getProcessProperties().getId(),true);
 
         //boolean parentProcessIdSet = false;
