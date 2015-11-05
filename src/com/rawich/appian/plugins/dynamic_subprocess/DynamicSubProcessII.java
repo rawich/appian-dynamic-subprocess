@@ -24,15 +24,21 @@ import com.appiancorp.suiteapi.type.NamedTypedValue;
 
 /**
  * 
- * @author Originally created by Ryan Gates (Appian Corp - April 2013) / Modified by Rawich Poomrin (September 2015)
+ * @author Rawich Poomrin (September 2015)
  * @version 2.0.1
- * Changes to this version of Dynamic Sub-Process II:
- *   1) All errors that resulted in new sub-process not started will cause the node to pause by exception.
+ * Dynamic Sub-Process II:
+ * 	This is a derivative of and extension to Dynamic Subprocess (Async) shared component by Ryan Gates in Appian Forum
+ *   1) All errors that resulted in new sub-process not started will cause the node to paused by exception.
  *   2) New input "Sub-Process Initiator" is added for the flexibility to specify initiator of the sub-process, instead of limited to the process model designer or initiator of the parent process.
  *   
- * There are two possible error scenarios, with appropriate error messages from resource bundle:
- * 	 - Looking up of process model ID from UUID failed (process model with the specified UUID does not exist or the user do not have privilege to do the lookup.)
- *   - Starting the subprocess failed (most likely because the user who executes this node does not have at least initiator right to the sub-process model and viewer right to parent process.
+ *   Error conditions will be reported both in the log file, and Alert, and node will be paused by exception. 
+ *   
+ * Known issue:
+ *	  - The node will fail to start sub-process if UUID is used to identify the sub-process and the Run-As user is not a system administrator.
+ *
+ * There are two main error scenarios, with appropriate error messages from resource bundle:
+ * 	 - Looking up of process model ID from UUID failed (permission issue or process model with the specified UUID does not exist)
+ *   - Starting the subprocess failed (most likely because the user who executes this node does not have enough security access to the target process model.
  */
 @PaletteInfo(paletteCategory = "Standard Nodes", palette = "Activities") 
 @Unattended
