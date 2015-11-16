@@ -11,6 +11,4 @@
   <smart-service name="Dynamic Subprocess" key="DynamicSubprocess"
     class="com.appian.plugins.dynamic_subprocess.DynamicSubprocess" />
     
-  <smart-service name="Dynamic Sub-Process II" key="DynamicSubProcessII"
-    class="com.rawich.appian.plugins.dynamic_subprocess.DynamicSubProcessII" />
 </appian-plugin>
